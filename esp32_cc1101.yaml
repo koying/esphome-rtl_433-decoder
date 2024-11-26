@@ -10,6 +10,11 @@ external_components:
       type: git
       url: https://github.com/juanboro/esphome-radiolib-cc1101
 
+packages:
+  cc1101_controls: # add interactive control
+    url: https://github.com/juanboro/esphome-radiolib-cc1101
+    files: [cc1101-controls.yaml]  
+
 mqtt:
   broker: !secret mqtt_host
   id: mqtt_client
