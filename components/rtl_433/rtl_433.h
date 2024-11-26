@@ -22,12 +22,12 @@ class RTL433Decoder : public Component {
   void status() {}
   void recv_raw(std::vector<int> &rawdata);
   void register_onjsonmessage_trigger(RTL433Trigger  *trig) { this->triggers_onjsonmsg_.push_back(trig); }
+  rtl_433_Decoder rd;
 
  protected:
   std::vector<RTL433Trigger *> triggers_onjsonmsg_;
 
  private:
-  rtl_433_Decoder _rd;
   static void process(char *msg, void *ctx);
 };
 
