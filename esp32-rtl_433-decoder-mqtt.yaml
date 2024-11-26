@@ -10,8 +10,8 @@ packages:
 
 external_components:
   - source:
-      type: local
-      path: components
+      type: git
+      url: https://github.com/juanboro/esphome-rtl_433-decoder
 
 # How to use: 
 # 1.  Create a rtl_433 component to receive the json messages and process

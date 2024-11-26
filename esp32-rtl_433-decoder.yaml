@@ -14,8 +14,8 @@ packages:
 
 external_components:
   - source:
-      type: local
-      path: components
+      type: git
+      url: https://github.com/juanboro/esphome-rtl_433-decoder
 
 # no mqtt since this is for API/web access
 mqtt: !remove
