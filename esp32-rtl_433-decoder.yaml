@@ -66,6 +66,10 @@ sensor:
     name: "Govee Leak Detector battery level"
     id: govee_4759_bat
     unit_of_measurement: percent
+  # - platform: template
+  #   name: "Unparsed rtl_433 signals"
+  #   id: rtl_433_unparsed
+  #   lambda: return id(my_rtl433_id).rd.unparsedSignals;
 binary_sensor:
   - platform: template
     name: "Govee Leak Detector Button Press"
