@@ -3,6 +3,7 @@
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
 #include "esphome/components/json/json_util.h"
+#include "esphome/components/remote_base/remote_base.h"
 
 #include <signalDecoder.h>
 
@@ -20,7 +21,7 @@ class RTL433Decoder : public Component {
   void dump_config() override {}
   void stop() {}
   void status() {}
-  void recv_raw(std::vector<int> &rawdata);
+  void recv_raw(esphome::remote_base::RawTimings& rawdata);
   void register_onjsonmessage_trigger(RTL433Trigger  *trig) { this->triggers_onjsonmsg_.push_back(trig); }
   rtl_433_Decoder rd;
 

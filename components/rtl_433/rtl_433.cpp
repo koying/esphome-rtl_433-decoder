@@ -1,4 +1,5 @@
 #include "esphome/core/log.h"
+
 #include "rtl_433.h"
 
 namespace esphome {
@@ -12,7 +13,7 @@ void RTL433Decoder::setup() {
   ESP_LOGD(RTAG, "rtl_433 setup done");
 }
 
-void RTL433Decoder::recv_raw(std::vector<int> &rawdata) {
+void RTL433Decoder::recv_raw(esphome::remote_base::RawTimings& rawdata) {
   ESP_LOGD(RTAG, "sending raw receive data to rtl_433 signal decoder");
   rd.processRaw(rawdata, (void *) this);
 }
