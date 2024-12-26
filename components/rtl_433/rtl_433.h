@@ -22,6 +22,7 @@ class RTL433Decoder : public Component {
   void stop() {}
   void status() {}
   void recv_raw(esphome::remote_base::RawTimings& rawdata);
+  void recv_rfraw(const char *p);
   void register_onjsonmessage_trigger(RTL433Trigger  *trig) { this->triggers_onjsonmsg_.push_back(trig); }
   rtl_433_Decoder rd;
 

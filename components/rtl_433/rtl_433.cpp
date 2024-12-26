@@ -18,6 +18,11 @@ void RTL433Decoder::recv_raw(esphome::remote_base::RawTimings& rawdata) {
   rd.processRaw(rawdata, (void *) this);
 }
 
+void RTL433Decoder::recv_rfraw(const char *p) {
+  ESP_LOGD(RTAG, "sending rfraw receive data to rtl_433 signal decoder");
+  rd.processRFRaw(p, (void *) this);
+}
+
 void RTL433Decoder::process(char *msg, void *ctx) {
   RTL433Decoder *objinst = (RTL433Decoder *) ctx;
   std::string s=msg; 
