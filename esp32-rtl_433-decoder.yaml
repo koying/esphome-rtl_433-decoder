@@ -1,3 +1,8 @@
+packages:
+  board_config: !include esp32_cc1101.yaml
+  #example of how to enable/disable specific protocols at boot
+  #runtime_protocols: !include rtl_433_protocols.yaml
+
 esphome:
   name: esp32-rtl433-decoder
   friendly_name: ESP32 RTL 433 Decoder example of ESPHome/Home Assistant setup
@@ -8,9 +13,6 @@ esphome:
 #      - '-DMY_RTL433_DEVICES="DECL(govee_h5054) DECL(lacrosse_tx141x) "'
   libraries:
     - rtl_433_Decoder_ESP=https://github.com/juanboro/rtl_433_Decoder_ESP.git
-
-packages:
-  board_config: !include esp32_cc1101.yaml
 
 external_components:
   - source:
@@ -78,3 +80,27 @@ binary_sensor:
     name: "Govee Leak Detector WET"
     id: govee_4759_wet
 
+## EXAMPLE of how to 
+script:
+  - id: boot_rtl_433
+    then:
+      - lambda: |-
+          // build a new custom protocol list for rtl_433
+          rtl_433_Decoder* rd=id(my_rtl433_id).get_rtl_433_Decoder();
+          r_cfg_t* cfg=&rd->g_cfg;
+          list_t* r_devs=&cfg->demod->r_devs;
+          ESP_LOGI("boot_rtl_433", "There are %d devices currently",r_devs->len);
+          list_free_elems(r_devs,&free);
+          char* arg = NULL;
+
+          for (int i = 0; i < cfg->num_r_devices; i++) {
+            if (cfg->devices[i].disabled <= 2) { // ignore anything hidden
+              r_device* rdev=&cfg->devices[i];
+              if ((strstr(rdev->name,"Govee")||(strstr(rdev->name,"LaCrosse")))) {
+                register_protocol(cfg, &cfg->devices[i], arg);
+                ESP_LOGI("boot_rtl_433", "Enabled protocol %s",rdev->name);
+              }
+            }
+          }
+
+          ESP_LOGI("boot_rtl_433", "... and now there are %d devices.",r_devs->len);

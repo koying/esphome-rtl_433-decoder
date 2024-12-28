@@ -1,0 +1,32 @@
+# example of how to enable a specific list of protocols.
+# you can get the protocol names using the rtl_433 command line on a host machine, i.e:
+# rtl_433 -R help
+esphome:
+  on_boot:
+    - priority: 200
+      then:
+        - script.execute: boot_rtl_433
+
+script:
+  - id: boot_rtl_433
+    then:
+      - lambda: |-
+          // build a new custom protocol list for rtl_433
+          rtl_433_Decoder* rd=id(my_rtl433_id).get_rtl_433_Decoder();
+          r_cfg_t* cfg=&rd->g_cfg;
+          list_t* r_devs=&cfg->demod->r_devs;
+          ESP_LOGI("boot_rtl_433", "There are %d devices currently",r_devs->len);
+          list_free_elems(r_devs,&free);
+          char* arg = NULL;
+
+          for (int i = 0; i < cfg->num_r_devices; i++) {
+            if (cfg->devices[i].disabled <= 2) { // ignore anything hidden
+              r_device* rdev=&cfg->devices[i];
+              if ((strstr(rdev->name,"Govee")||(strstr(rdev->name,"LaCrosse")))) {
+                register_protocol(cfg, &cfg->devices[i], arg);
+                ESP_LOGI("boot_rtl_433", "Enabled protocol %s",rdev->name);
+              }
+            }
+          }
+
+          ESP_LOGI("boot_rtl_433", "... and now there are %d devices.",r_devs->len);
