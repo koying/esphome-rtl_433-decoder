@@ -1,7 +1,17 @@
 import esphome.codegen as cg
 from esphome import automation
 import esphome.config_validation as cv
-from esphome.const import *
+from esphome.const import (
+    CONF_ON_JSON_MESSAGE,
+    CONF_TRIGGER_ID,
+    CONF_ID
+)
+from esphome.core import CORE
+
+def AUTO_LOAD():
+    if CORE.is_esp8266 or CORE.is_libretiny:
+        return ["async_tcp", "json"]
+    return ["json"]
 
 rtl433_ns = cg.esphome_ns.namespace('rtl_433')
 RTL433Decoder = rtl433_ns.class_('RTL433Decoder', cg.Component)
