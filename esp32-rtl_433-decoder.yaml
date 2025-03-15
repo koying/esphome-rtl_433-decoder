@@ -1,33 +1,31 @@
-packages:
-  board_config: !include esp32_cc1101.yaml
-  #example of how to enable/disable specific protocols at boot
+packages: 
+  # You need to configure your esp32 board and radio - this example utilizes a TI-CC1101 connected to a
+  # lowcost ESP32 dev board:
+  esp32-cc1101: !include github://juanboro/esphome-radiolib-cc1101/esp32-cc1101.yaml
+
+  # this generally should be what you need to add this rtl_433 component to esphome:
+  rtl_433: !include rtl_433.yaml
+
+  #example of how to enable/disable specific rtl_433 protocols at boot included here:
   #runtime_protocols: !include rtl_433_protocols.yaml
 
 esphome:
   name: esp32-rtl433-decoder
   friendly_name: ESP32 RTL 433 Decoder example of ESPHome/Home Assistant setup
 
-  # can reduce memory/cpu usage if desired by setting build_flags to limit devices...
-#platformio_options:
-#    build_flags:
-#      - '-DMY_RTL433_DEVICES="DECL(govee_h5054) DECL(lacrosse_tx141x) "'
-  libraries:
-    - rtl_433_Decoder_ESP=https://github.com/juanboro/rtl_433_Decoder_ESP.git
+  # You can reduce memory/cpu usage if desired by setting build_flags to limit devices compiled in...
+  #platformio_options: (see notes in rtl_433_protocols.yaml)
+  #  build_flags:
+  #    - '-DMY_RTL433_DEVICES="DECL(govee_h5054) DECL(lacrosse_tx141x) "'
 
-external_components:
-  - source:
-      type: git
-      url: https://github.com/juanboro/esphome-rtl_433-decoder
-
-# no mqtt since this is for API/web access
-mqtt: !remove
 
 # How to use: 
 # 1.  Create a rtl_433 component to receive the json messages and process
 # 2.  Send raw data to the rtl_433 component via lambdas (usually remote_receiver on_raw)
 
 # this example processes pulses from the remote receiver component and then updates buttons
-# and sensors from the decoded data
+# and sensors from the decoded data.  For example ideas of how to obtain the model and id - 
+# see the esp32-rtl_433-decoder-mqtt.yaml or esp32-rtl_433-decoder-api.yaml example files.
 rtl_433:
   id: my_rtl433_id
   on_json_message: 
@@ -80,27 +78,3 @@ binary_sensor:
     name: "Govee Leak Detector WET"
     id: govee_4759_wet
 
-## EXAMPLE of how to 
-script:
-  - id: boot_rtl_433
-    then:
-      - lambda: |-
-          // build a new custom protocol list for rtl_433
-          rtl_433_Decoder* rd=id(my_rtl433_id).get_rtl_433_Decoder();
-          r_cfg_t* cfg=&rd->g_cfg;
-          list_t* r_devs=&cfg->demod->r_devs;
-          ESP_LOGI("boot_rtl_433", "There are %d devices currently",r_devs->len);
-          list_free_elems(r_devs,&free);
-          char* arg = NULL;
-
-          for (int i = 0; i < cfg->num_r_devices; i++) {
-            if (cfg->devices[i].disabled <= 2) { // ignore anything hidden
-              r_device* rdev=&cfg->devices[i];
-              if ((strstr(rdev->name,"Govee")||(strstr(rdev->name,"LaCrosse")))) {
-                register_protocol(cfg, &cfg->devices[i], arg);
-                ESP_LOGI("boot_rtl_433", "Enabled protocol %s",rdev->name);
-              }
-            }
-          }
-
-          ESP_LOGI("boot_rtl_433", "... and now there are %d devices.",r_devs->len);
