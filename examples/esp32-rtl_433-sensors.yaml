@@ -1,7 +1,7 @@
 # Example of rtl_433 based sensors in ESPHome
 packages: 
   # this generally should be all what you need to add this rtl_433 component to esphome:
-  rtl_433: !include github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
+  rtl_433: github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
 
   #example of how to enable/disable specific rtl_433 protocols at boot.  This example enables
   #only the two sensors (a Govee leak detector and Lacross temperature/humidity sensor) 

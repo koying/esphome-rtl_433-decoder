@@ -1,7 +1,7 @@
 # Example of rtl_433 based sensors in ESPHome
 packages: 
   # this generally should be all what you need to add this rtl_433 component to esphome:
-  rtl_433: !include github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
+  rtl_433: github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
 
   #you need to setup ESPHome and your radio board settings - customize as needed
   esp32_board: !include esp32devboard_and_cc1101_example.yaml
@@ -55,6 +55,8 @@ rtl_433:
           payload: 
             root.set(x);
       # Also generate a home assistant event (you can then do all kinds of things with this data in home-assistant)
+      # Note that HA will also receive all the event data above - so really only one of these is necessary...
+      # HA event API is better, but MQTT is more universal.   The choice is yours.
       - homeassistant.event:
           event: esphome.rtl_433
           data:
