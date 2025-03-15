@@ -10,10 +10,10 @@ This ESPHome external component provides [rtl_433](https://github.com/merbanan/r
 2.  Add the rtl_433 config to your yaml with an on_json_message handler...
     ```yaml
     rtl_433:
-    id: my_rtl433_id
-    on_json_message: 
-        then:
-            ....
+        id: my_rtl433_id
+        on_json_message: 
+            then:
+                ....
     ```
     You can find example ESPHome json message trigger handling examples in the ESPhome MQTT [documentation](https://esphome.io/components/mqtt.html#on-json-message-trigger).  Examples are also included here.
 
