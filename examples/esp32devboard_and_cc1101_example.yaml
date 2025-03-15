@@ -1,0 +1,36 @@
+# You need to configure your esp32 board and radio - this example utilizes a TI-CC1101 connected to a
+# lowcost ESP32 dev board:
+packages: 
+  esp32-cc1101: github://juanboro/esphome-radiolib-cc1101/esp32-cc1101.yaml
+
+###############################################
+## Site settings: Customize these as necessary
+###############################################
+esphome:
+  name: esp32-rtl433-decoder
+  friendly_name: ESP32 RTL 433 Decoder example of ESPHome/Home Assistant setup
+
+  # Advanced usage - for rtl_433 compilation:
+  # You can reduce memory/cpu usage if desired by setting build_flags to limit devices compiled in...
+  #platformio_options: (see notes in rtl_433_protocols.yaml)
+  #  build_flags:
+  #    - '-DMY_RTL433_DEVICES="DECL(govee_h5054) DECL(lacrosse_tx141x) "'
+
+wifi:
+  ssid: !secret wifi_name
+  password: !secret wifi_pass
+  fast_connect: true
+
+esp32:  
+  board: esp32dev
+  framework:
+    # change as necessary - I recommend esp-idf for this currently...
+    type: esp-idf
+#    type: arduino
+
+logger:
+#  level: VERBOSE
+  level: INFO
+  
+# End of site settings
+###############################################

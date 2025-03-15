@@ -1,0 +1,71 @@
+# Example of rtl_433 based sensors in ESPHome
+packages: 
+  # this generally should be all what you need to add this rtl_433 component to esphome:
+  rtl_433: !include github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
+
+  #you need to setup ESPHome and your radio board settings - customize as needed
+  esp32_board: !include esp32devboard_and_cc1101_example.yaml
+
+captive_portal:
+
+web_server:
+  port: 80
+
+# enable the home assistant API (for events below)
+api:
+
+# Enable MQTT (for MQTT below)
+mqtt:
+  broker: !secret mqtt_host
+  id: mqtt_client
+
+###############################################
+## rtl_433 decoder example
+###############################################
+# How to use: 
+# 1.  Send raw data to the rtl_433 component via lambdas (usually remote_receiver on_raw)
+# 2.  Use the on_json_message trigger from the rtl_433 component to receive the json messages and process
+
+# this example processes pulses from the remote receiver component and then sends decoded
+# data via MQTT similar to how rtl_433 would.  It also generates home-assistant event bus messages
+# via the API (if HA is connected and listening)
+remote_receiver:
+  - id: !extend rf_receiver
+    on_raw:
+      then:
+        - lambda: |-
+            id(my_rtl433_id).recv_raw(x);
+
+rtl_433:
+  id: my_rtl433_id
+  on_json_message: 
+    then:
+      # MQTT publish similar to how rtl_433 would...
+      # todo: add in the timestamp to the json message
+      - mqtt.publish_json:
+          topic: !lambda |-
+            std::string topic=str_sprintf("rtl_433/%s/events",App.get_name().c_str());
+            if (x["model"]) {
+              if (x["id"])
+                topic+=str_sprintf("/%s/%d",x["model"].as<const char*>(),x["id"].as<int>());
+              else               
+                topic+=str_sprintf("/%s",x["model"].as<const char*>());
+            }
+            return(topic);            
+          payload: 
+            root.set(x);
+      # Also generate a home assistant event (you can then do all kinds of things with this data in home-assistant)
+      - homeassistant.event:
+          event: esphome.rtl_433
+          data:
+            hostname: !lambda |-
+                return App.get_name();
+            message: !lambda |-
+              return json::build_json([x](JsonObject root) {
+                root.set(x);
+              });
+            # You could also include other interesting information you may have from your RF receiver:
+            # frequency: !lambda |-
+            #   return id(mycc1101)._freq;
+            # rssi: !lambda |-
+            #   return id(mycc1101).last_rx_rssi;

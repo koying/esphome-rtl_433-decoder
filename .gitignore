@@ -1,5 +1,5 @@
 # Gitignore settings for ESPHome
 /.esphome/
-/secrets.yaml
+/examples/secrets.yaml
 __pycache__/
 .vscode/
