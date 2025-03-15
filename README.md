@@ -23,7 +23,7 @@ This ESPHome external component provides [rtl_433](https://github.com/merbanan/r
             id(my_rtl433_id).recv_raw(rawdata);
     ```
     The included examples show how to do this via the ESPHome [remote_receiver](https://esphome.io/components/remote_receiver) component.
-## Wokrking Examples
+## Working Examples
 Two examples are provided:
 1.  [esp32-rtl_433-decoder.yaml](https://github.com/juanboro/esphome-rtl_433-decoder/blob/main/examples/esp32-rtl_433-decoder.yaml) - MQTT relay - generates rtl_433 style MQTT messages from decoded receiver data.  Also includes example of how to generate Home Assistant API events.
 1.  [esp32-rtl_433-sensors.yaml)](https://github.com/juanboro/esphome-rtl_433-decoder/blob/main/examples/esp32-rtl_433-sensors.yaml) - Example of creating specific ESPHome sensors from rtl_433 json messages.  It also shows how to limit to the component to only specific protocols, which will speed up processing and help prevent: Component remote_receiver took a long time for an operation (>30ms)
