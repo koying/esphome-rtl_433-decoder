@@ -1,9 +1,11 @@
 #pragma once
 
+#include <vector>
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
 #include "esphome/components/json/json_util.h"
 #include "esphome/components/remote_base/remote_base.h"
+#include "esphome/core/helpers.h"
 
 #include <signalDecoder.h>
 
