@@ -3,7 +3,3 @@
 external_components:
   - source: github://juanboro/esphome-rtl_433-decoder
     components: [ rtl_433 ]
-
-esphome:
-  libraries:
-    - rtl_433_Decoder_ESP=https://github.com/juanboro/rtl_433_Decoder_ESP.git
