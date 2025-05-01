@@ -16,7 +16,7 @@ packages:
 ## rtl_433 sensor example
 ###############################################
 # How to use: 
-# 1.  Send raw data to the rtl_433 component via lambdas (usually remote_receiver on_raw)
+# 1.  Configure the rtl_433 component to receive ESPhome remote data (receiver_id)
 # 2.  Use the on_json_message trigger from the rtl_433 component to receive the json messages and process
 
 # this example processes pulses from the remote receiver component and then updates buttons
@@ -27,15 +27,9 @@ captive_portal:
 web_server:
   port: 80
 
-remote_receiver:
-  - id: !extend rf_receiver
-    on_raw:
-      then:
-        - lambda: |-
-            id(my_rtl433_id).recv_raw(x);
-
 rtl_433:
   id: my_rtl433_id
+  receiver_id: rf_receiver
   on_json_message: 
     then:
       - lambda: |-          

@@ -18,6 +18,15 @@ void RTL433Decoder::recv_raw(esphome::remote_base::RawTimings& rawdata) {
   rd.processRaw(rawdata, (void *) this);
 }
 
+bool RTL433Decoder::on_receive(remote_base::RemoteReceiveData data) {
+  if (data.size() < 10)
+    return false;  // reject anything that rtl_433 likely won't do anything with
+
+  rd.processRaw(data.get_raw_data(), (void *) this);
+
+  return true; // it's not really clear what this boolean is for exactly...
+}
+
 void RTL433Decoder::process(char *msg, void *ctx) {
   RTL433Decoder *objinst = (RTL433Decoder *) ctx;
   std::string s=msg; 

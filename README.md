@@ -7,22 +7,22 @@ This ESPHome external component provides [rtl_433](https://github.com/merbanan/r
     packages: 
         rtl_433: github://juanboro/esphome-rtl_433-decoder/rtl_433.yaml
     ```
-2.  Add the rtl_433 config to your yaml with an on_json_message handler...
+2.  Add the rtl_433 config to your yaml with a remote_reciver id and an on_json_message handler...
     ```yaml
     rtl_433:
         id: my_rtl433_id
+        receiver_id: rf_receiver
         on_json_message: 
             then:
                 ....
     ```
     You can find example ESPHome json message trigger handling examples in the ESPhome MQTT [documentation](https://esphome.io/components/mqtt.html#on-json-message-trigger).  Examples are also included here.
 
-3.  You can send raw OOK/FSK pulse data to the decoder via lambdas like this:
+3.  (optional) Alternatively to setting receier_id, you can send raw OOK/FSK pulse data to the decoder via lambdas like this:
     ```yaml
         - lambda: |-
             id(my_rtl433_id).recv_raw(rawdata);
     ```
-    The included examples show how to do this via the ESPHome [remote_receiver](https://esphome.io/components/remote_receiver) component.
 ## Working Examples
 Two examples are provided:
 1.  [esp32-rtl_433-decoder.yaml](https://github.com/juanboro/esphome-rtl_433-decoder/blob/main/examples/esp32-rtl_433-decoder.yaml) - MQTT relay - generates rtl_433 style MQTT messages from decoded receiver data.  Also includes example of how to generate Home Assistant API events.

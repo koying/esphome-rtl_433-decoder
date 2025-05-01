@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 from esphome import automation
 import esphome.config_validation as cv
+from esphome.components import remote_base
 from esphome.const import (
     CONF_ON_JSON_MESSAGE,
     CONF_TRIGGER_ID,
@@ -23,6 +24,9 @@ RTL433Trigger = rtl433_ns.class_(
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(RTL433Decoder),
+        cv.Optional(remote_base.CONF_RECEIVER_ID): cv.use_id(
+            remote_base.RemoteReceiverBase
+        ),
         cv.Optional(CONF_ON_JSON_MESSAGE): automation.validate_automation(
             {
                 cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(RTL433Trigger),
@@ -36,6 +40,9 @@ async def to_code(config):
     await cg.register_component(var, config)
     
     cg.add_library("https://github.com/juanboro/rtl_433_Decoder_ESP.git",None)
+
+    if remote_base.CONF_RECEIVER_ID in config:
+        await remote_base.register_listener(var, config)
 
     for conf in config.get(CONF_ON_JSON_MESSAGE, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID])

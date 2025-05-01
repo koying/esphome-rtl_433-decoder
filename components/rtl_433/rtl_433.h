@@ -14,8 +14,8 @@ namespace rtl_433 {
 
 class RTL433Trigger : public Trigger<JsonObjectConst> {};
 
-class RTL433Decoder : public Component {
- public:
+class RTL433Decoder : public Component, public remote_base::RemoteReceiverListener  {
+  public:
   RTL433Decoder() {}
 
   void setup() override;
@@ -26,6 +26,7 @@ class RTL433Decoder : public Component {
   void recv_raw(esphome::remote_base::RawTimings& rawdata);
   void register_onjsonmessage_trigger(RTL433Trigger  *trig) { this->triggers_onjsonmsg_.push_back(trig); }
   rtl_433_Decoder* get_rtl_433_Decoder() { return &rd; }
+  bool on_receive(remote_base::RemoteReceiveData data);
 
  protected:
   std::vector<RTL433Trigger *> triggers_onjsonmsg_;
