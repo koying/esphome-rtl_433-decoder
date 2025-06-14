@@ -29,3 +29,7 @@ Two examples are provided:
 1.  [esp32-rtl_433-sensors.yaml)](https://github.com/juanboro/esphome-rtl_433-decoder/blob/main/examples/esp32-rtl_433-sensors.yaml) - Example of creating specific ESPHome sensors from rtl_433 json messages.  It also shows how to limit to the component to only specific protocols, which will speed up processing and help prevent: Component remote_receiver took a long time for an operation (>30ms)
 
 The example configurations points to a configuration with a ESP32 dev board connected to a TI-CC1101 board (both from AliExpress ~ $5 total).  However, any working way of receiving OOK on/off pulses or FSK mark/space data should be able to work.
+
+## See Also...
+Underlying library details: https://github.com/juanboro/rtl_433_Decoder_ESP
+
