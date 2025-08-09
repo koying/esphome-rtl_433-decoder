@@ -1,5 +1,5 @@
 # These need to be set to add the rtl_433 external component to ESPHome
 # This currently ONLY works with ESP-32 boards
 external_components:
-  - source: github://juanboro/esphome-rtl_433-decoder
+  - source: github://koying/esphome-rtl_433-decoder
     components: [ rtl_433 ]
