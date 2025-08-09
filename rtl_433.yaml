@@ -3,3 +3,4 @@
 external_components:
   - source: github://koying/esphome-rtl_433-decoder
     components: [ rtl_433 ]
+    refresh: always
